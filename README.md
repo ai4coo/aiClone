@@ -14,14 +14,14 @@ The **GUI** (`aiclone-gui`) is a single window with eight Grok Bot clone buttons
 
 ## Install
 
-Download the build for your OS from [`builds/`](builds) (latest: [`builds/v0.1.1-beta`](builds/v0.1.1-beta)). Each folder has a `SHA256SUMS` file.
+Download the build for your OS from [`builds/`](builds) (latest: [`builds/v0.1.2-beta`](builds/v0.1.2-beta), also on the [latest release](../../releases/latest)). Each folder has a `SHA256SUMS` file.
 
 | OS | File | Install |
 |---|---|---|
 | Linux x86_64 (Debian / Ubuntu) | `aiclone_<version>_amd64.deb` | `sudo apt install ./aiclone_<version>_amd64.deb` |
 | Linux x86_64 (any) | `aiclone-<version>-linux-x86_64.tar.gz` | `tar xzf aiclone-*.tar.gz` and copy `aiclone`, `aiclone-launcher`, `aiclone-gui` onto your `PATH` (e.g. `~/.local/bin`) |
 | macOS | coming soon | |
-| Windows | coming soon | |
+| Windows x86_64 | `aiclone-<version>-windows-x86_64.zip` | Unzip to a folder (e.g. `%LOCALAPPDATA%\Programs\aiClone`) and run `aiclone-gui.exe`; add the folder to `PATH` to use `aiclone.exe` from a terminal |
 
 Linux GUI builds need GTK 3 and X11 at runtime.
 
