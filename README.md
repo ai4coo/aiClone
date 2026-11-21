@@ -6,7 +6,7 @@ Grok Bot (`/Applications/Grok Bot.app`, bundle id `com.anysphere.sand`) is the p
 
 This is a Rust CLI rewrite of [Lots of Agents](https://github.com/carllippert/lots_of_agents) (Swift, MIT, Carl Lippert). Behavior is based on that project's source; this repo does not copy its code. Not affiliated with xAI, Anysphere, Anthropic, or OpenAI.
 
-This repository holds **builds only** (in [`builds/`](builds), one folder per version), plus this README and the license. Source code is kept elsewhere.
+This repository holds only the **latest build** (on the [latest release](../../releases/latest)), plus this README and the license. Source code is kept elsewhere.
 
 The **GUI** (`aiclone-gui`) is a single window with eight Grok Bot clone buttons, Export, and Import. It is built with **egui / eframe** (the same immediate-mode toolkit [aiTrack](https://github.com/genen/aiTrack) uses) so the look — dark grouped chrome, compact rounded buttons, system-like sans — matches that app without pulling in a webview. The CLI (`aiclone`) is unchanged.
 
@@ -14,7 +14,7 @@ The **GUI** (`aiclone-gui`) is a single window with eight Grok Bot clone buttons
 
 ## Install
 
-Download the build for your OS from [`builds/`](builds) (latest: [`builds/v0.1.2-beta`](builds/v0.1.2-beta), also on the [latest release](../../releases/latest)). Each folder has a `SHA256SUMS` file.
+Download the build for your OS from the [latest release](../../releases/latest). SHA-256 checksums are in the release notes.
 
 | OS | File | Install |
 |---|---|---|
