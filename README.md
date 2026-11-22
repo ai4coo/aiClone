@@ -4,26 +4,50 @@ Run several separately signed-in copies of **Grok Bot**, Cursor, Claude, and Cha
 
 Grok Bot (`/Applications/Grok Bot.app`, bundle id `com.anysphere.sand`) is the primary target. Each clone gets its own data folder, Dock wrapper, tinted icon, a private local-exec daemon (so it cannot steal the official app's computer connection), and a short-lived URL-scheme claim so browser sign-in returns to the clone that started it.
 
-This is a Rust CLI rewrite of [Lots of Agents](https://github.com/carllippert/lots_of_agents) (Swift, MIT, Carl Lippert). Behavior is based on that project's source; this repo does not copy its code. Not affiliated with xAI, Anysphere, Anthropic, or OpenAI.
+This is a Rust CLI rewrite of [Lots of Agents](https://github.com/carllippert/lots_of_agents) (Swift, MIT, Carl Lippert). Behavior is based on that project's source; aiClone does not copy its code. Not affiliated with xAI, Anysphere, Anthropic, or OpenAI.
 
-This repository holds only the **latest build** (on the [latest release](../../releases/latest)), plus this README and the license. Source code is kept elsewhere.
+This repository holds the ready-to-run builds (on the [Releases page](https://github.com/ai4coo/aiClone/releases/latest)), this README and the license. The source code is not published.
 
-The **GUI** (`aiclone-gui`) is a single window with eight Grok Bot clone buttons, Export, and Import. It is built with **egui / eframe** (the same immediate-mode toolkit [aiTrack](https://github.com/genen/aiTrack) uses) so the look — dark grouped chrome, compact rounded buttons, system-like sans — matches that app without pulling in a webview. The CLI (`aiclone`) is unchanged.
+The **GUI** (`aiclone-gui`) is a single window with eight Grok Bot clone buttons, Export, and Import. It is built with **egui / eframe** (the same immediate-mode toolkit [aiTrack](https://github.com/ai4coo/aiTrack) uses) so the look — dark grouped chrome, compact rounded buttons, system-like sans — matches that app without pulling in a webview. The CLI (`aiclone`) is unchanged.
+
+![aiClone window](docs/img/window.png)
 
 ---
 
 ## Install
 
-Download the build for your OS from the [latest release](../../releases/latest). SHA-256 checksums are in the release notes.
+Download the file for your computer from the [latest release](https://github.com/ai4coo/aiClone/releases/latest). Each download holds three programs: `aiclone` (command line), `aiclone-gui` (the window) and `aiclone-launcher` (used by the clones). `SHA256SUMS` on the same page lists the checksum of each file.
 
-| OS | File | Install |
-|---|---|---|
-| Linux x86_64 (Debian / Ubuntu) | `aiclone_<version>_amd64.deb` | `sudo apt install ./aiclone_<version>_amd64.deb` |
-| Linux x86_64 (any) | `aiclone-<version>-linux-x86_64.tar.gz` | `tar xzf aiclone-*.tar.gz` and copy `aiclone`, `aiclone-launcher`, `aiclone-gui` onto your `PATH` (e.g. `~/.local/bin`) |
-| macOS | coming soon | |
-| Windows x86_64 | `aiclone-<version>-windows-x86_64.zip` | Unzip to a folder (e.g. `%LOCALAPPDATA%\Programs\aiClone`) and run `aiclone-gui.exe`; add the folder to `PATH` to use `aiclone.exe` from a terminal |
+| Computer | File |
+|---|---|
+| Mac (Apple Silicon, M1 or later) | `aiclone-0.1.3-beta-macos-arm64.tar.gz` |
+| Windows 10/11 (64-bit) | `aiclone-0.1.3-beta-windows-x86_64.zip` |
+| Linux x86_64, Debian or Ubuntu (24.04 and newer) | `aiclone_0.1.3-beta_amd64.deb` |
+| Linux x86_64, other | `aiclone-0.1.3-beta-linux-x86_64.tar.gz` |
 
-Linux GUI builds need GTK 3 and X11 at runtime.
+### Mac
+
+```bash
+mkdir -p "$HOME/.local/bin"
+tar -xzf ~/Downloads/aiclone-0.1.3-beta-macos-arm64.tar.gz -C "$HOME/.local/bin"
+xattr -d com.apple.quarantine "$HOME/.local/bin/aiclone" "$HOME/.local/bin/aiclone-launcher" "$HOME/.local/bin/aiclone-gui" 2>/dev/null
+# if ~/.local/bin is not on your PATH:
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+The Mac programs are not signed with an Apple Developer ID yet, so macOS blocks them when they come from a browser download. The `xattr` line above removes that block. See [CODE-SIGNING-POLICY.md](CODE-SIGNING-POLICY.md).
+
+### Windows
+
+Unzip `aiclone-0.1.3-beta-windows-x86_64.zip` to a folder (for example `%LOCALAPPDATA%\Programs\aiClone`) and run `aiclone-gui.exe`. Add that folder to `PATH` to use `aiclone.exe` from a terminal. The Windows programs are not code-signed yet, so Windows SmartScreen may show "Unknown publisher" (choose "Run anyway").
+
+### Linux
+
+```bash
+sudo apt install ./aiclone_0.1.3-beta_amd64.deb
+```
+
+Or extract `aiclone-0.1.3-beta-linux-x86_64.tar.gz` and copy the three programs onto your `PATH` (for example `~/.local/bin`). Both Linux builds need glibc 2.39 or newer (Ubuntu 24.04, Debian 13 or later). The window needs GTK 3 and X11 (on GNOME with Wayland it runs through XWayland).
 
 Confirm a supported app is installed (Mac):
 
@@ -48,7 +72,7 @@ The window has:
 2. **Export** — All (one zip of every grokclone slot) or **1** (pick a slot). Optional AES-256-GCM in Settings; turning that switch on means each export asks for a password **and confirmation** (empty is rejected).
 3. **Import** — All (restore an All zip) or **1** (a single-clone zip into any slot). Confirms before overwrite; refuses zip-slip (`..`, absolute paths, symlinks). Running clones must be quit first (the dialog can quit them). A snapshot is saved before overwrite; if the snapshot cannot be written the import is aborted. **Undo last import** asks for confirmation (and a decrypt password if the snapshot is encrypted).
 
-On/off options are **switches** matching [aiTrack](https://github.com/genen/aiTrack) Settings (capsule track, system blue when on, gray when off, white sliding knob) — not checkboxes. Settings (the small ▸ at the bottom): encrypt exports, open aiClone at login, weekly All backup to a folder, undo last import. Turning **Weekly All backup** on prompts for a backup password (two fields); that password is stored in the OS keychain / a private credential file so scheduled backups run encrypted and unattended. Cancelling the prompt leaves the switch off.
+On/off options are **switches** matching [aiTrack](https://github.com/ai4coo/aiTrack) Settings (capsule track, system blue when on, gray when off, white sliding knob) — not checkboxes. Settings (the small ▸ at the bottom): encrypt exports, open aiClone at login, weekly All backup to a folder, undo last import. Turning **Weekly All backup** on prompts for a backup password (two fields); that password is stored in the OS keychain / a private credential file so scheduled backups run encrypted and unattended. Cancelling the prompt leaves the switch off.
 
 A new PIN is at least 6 characters, hashed with PBKDF2-HMAC-SHA256 (600k iterations, salted); failed attempts back off. Locked slots must be unlocked before launch, PIN changes, export, import, or reset. Dock / CLI launches of a locked clone are refused (Touch ID / Hello can unlock the wrapper).
 
@@ -134,7 +158,7 @@ Instead, aiClone keeps a claim book (`url-claims.json` next to `profiles.json`):
 - When the claim expires, the clone is quit, or the slot is reset, Launch Services is restored **first**; the claim is dropped only after that apply succeeds. A detached `aiclone-gui --restore-claims` helper (`setsid`, not `fork`) watches until the book is empty. The wrapper also restores expired claims on every start.
 - Choosing Receive browser sign-in while another clone still owns the claim shows a short message instead of switching the handler. A corrupt `url-claims.json` restores every official handler and is rewritten empty.
 
-Linux and Windows do not register these schemes; the claim book still records the same policy so the tests cover it.
+Linux and Windows do not register these schemes; the claim book still records the same policy.
 
 ## Local computer connection
 
@@ -169,7 +193,7 @@ ChatGPT keeps login state in `~/.codex` (outside Chromium user-data), so clones 
 
 - **Unofficial.** Vendor updates can break `--user-data-dir`, URL schemes, or helper lookup. Run `aiclone refresh` after an app update; if a clone still misbehaves, delete it and create a new one.
 - **Gatekeeper.** Wrappers are ad-hoc signed. First launch: right-click → Open, or System Settings → Privacy & Security → Open Anyway. `xattr -dr com.apple.quarantine` on the wrapper if macOS quarantined a copy.
-- **Not a security boundary.** Clones isolate *accounts and chats*, not malware. Full-home overlay still sees your real files via symlinks.
+- **Not a security boundary.** Clones isolate *accounts and chats*, not malware. Full-home overlay still sees your real files via symlinks. A slot PIN or Touch ID lock only stops launches through aiClone; the clone's data on disk is not encrypted.
 - **Sparkle is stripped from the clone only** (Electron Framework does not link it). **Squirrel.framework stays** — Electron Framework loads `@rpath/Squirrel.framework/Squirrel` (also Mantle and ReactiveObjC). Updates are disabled via the `SU*` plist keys and `--use-mock-keychain`. Update the official app; clones pick it up on next launch / `refresh`.
 - **Grok: several local agents at once (tentative).** With the official app and clones each on their own data folder (`SAND_DATA_ROOT` / `SAND_USER_DATA_DIR`; the official default is `~/.grokbot`, `%USERPROFILE%\.grokbot` on Windows), all local computer connections stayed up at the same time on a Mac and a Windows PC. Earlier builds saw newest-wins, where the last agent to connect pushed the others offline. Logs then showed server-side connection resets on the clone's daemon, which cleared after restarting the official app's daemon. If it happens again, copy both `local-exec-daemon.log` files before restarting anything. Still open: clones log `device tool status read failed`.
 - **Mac-only features.** Bundle copy, `codesign`, `iconutil`, URL-scheme handling, Touch ID, and launching Grok Bot clones work only on a Mac.
@@ -178,7 +202,7 @@ ChatGPT keeps login state in `~/.codex` (outside Chromium user-data), so clones 
 
 ```bash
 rm -f "$HOME/.local/bin/aiclone" "$HOME/.local/bin/aiclone-launcher" "$HOME/.local/bin/aiclone-gui"
-# or, if installed from the .deb: sudo apt remove aiclone
+# or, if you installed the .deb: sudo apt remove aiclone
 # optional: clones + wrappers you created
 # rm -rf "$HOME/Library/Application Support/AiClone"
 # rm -rf "$HOME/.aiclone"
@@ -187,10 +211,28 @@ rm -f "$HOME/.local/bin/aiclone" "$HOME/.local/bin/aiclone-launcher" "$HOME/.loc
 
 Removing aiClone does **not** uninstall Grok Bot / Cursor / Claude / ChatGPT.
 
+## Quick start (Mac)
+
+After installing:
+
+```bash
+aiclone apps
+aiclone new grok Work --color '#FF453A'
+aiclone launch Work
+# sign in, then:
+aiclone new grok Personal --color '#34C759'
+aiclone launch Personal
+aiclone list
+```
+
 ## Credit
 
 The clone model — per-profile `--user-data-dir`, APFS-cloned wrappers, team-bound entitlement stripping, URL-scheme claiming, Cursor's short socket path, and ChatGPT's full-home overlay — comes from [Lots of Agents](https://github.com/carllippert/lots_of_agents) by Carl Lippert, MIT License. This project is an independent Rust implementation.
 
+## Privacy
+
+aiClone runs only on your computer and does not send anything to the author or anyone else. See [PRIVACY.md](PRIVACY.md).
+
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). Third-party components and their licenses are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
