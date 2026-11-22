@@ -235,4 +235,4 @@ aiClone runs only on your computer and does not send anything to the author or a
 
 ## License
 
-[MIT](LICENSE). Third-party components and their licenses are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+aiClone is released under the MIT License with the Commons Clause License Condition v1.0 ([LICENSE](LICENSE)), copyright 2026 Take Two Partners, LLC. You may use, copy and share aiClone, but the Commons Clause does not let you sell it, or a product or service whose value comes mainly from it. This license applies from the release after 0.1.3-beta. Version 0.1.3-beta and earlier releases keep the MIT License they shipped with. Third-party components and their licenses are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
